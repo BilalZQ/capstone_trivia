@@ -8,7 +8,8 @@ from urllib.request import urlopen
 
 from constants import (
     AUTH0_DOMAIN, ALGORITHMS, API_AUDIENCE,
-    ERROR_MESSAGES, HTTP_STATUS
+    ERROR_MESSAGES, HTTP_STATUS, MISSING_AUTHORIZATION,
+    INVALID_BEARER_TOKEN
 )
 
 
@@ -40,16 +41,14 @@ def get_token_auth_header():
     """
     header = request.headers.get('Authorization')
     if not header:
-        auth_error('Authorization header is required', HTTP_STATUS.UNAUTHORIZED)
+        auth_error(MISSING_AUTHORIZATION, HTTP_STATUS.UNAUTHORIZED)
 
     headers_arr = header.split(' ')
 
     if headers_arr[0].lower() != 'bearer':
         auth_error('Header expected to have Bearer before token', HTTP_STATUS.UNAUTHORIZED)
     elif len(headers_arr) != 2:
-        auth_error(
-            'Invalid authorization format, expected "Bearer <Token>"',
-            HTTP_STATUS.UNAUTHORIZED)
+        auth_error(INVALID_BEARER_TOKEN, HTTP_STATUS.UNAUTHORIZED)
 
     return headers_arr[1]  # Token
 

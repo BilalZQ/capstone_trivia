@@ -127,16 +127,16 @@ def create_app(test_config=None):
         if not question:
             abort(HTTP_STATUS.NOT_FOUND)
 
-        question = request.get_json()
-        question.question = request.get('question')
-        question.answer = request.get('answer')
-        question.category = request.get('category')
-        question.difficulty = request.get('difficulty')
+        request_data = request.get_json()
+        question.question = request_data.get('question')
+        question.answer = request_data.get('answer')
+        question.category = request_data.get('category')
+        question.difficulty = request_data.get('difficulty')
         question.update()
 
         return jsonify({
           'success': True,
-          'id': question.format()
+          'question': question.format()
         }), HTTP_STATUS.CREATED
 
     @app.route('/questions/search', methods=['POST'])

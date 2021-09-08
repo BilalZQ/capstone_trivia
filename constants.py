@@ -34,11 +34,4 @@ ERROR_MESSAGES = {
 
 
 MISSING_AUTHORIZATION = 'Authorization header in request headers is mandatory.'
-MISSING_BEARER = 'Authorization header must start with "Bearer".'
-MISSING_TOKEN = 'Authorization header must have token.'
-MISSING_BEARER_TOKEN = 'Authorization header must be a Bearer token.'
-AUTHORIZATION_MALFORMED = 'Authorization malformed.'
-TOKEN_EXPIRED = 'Token Expired.'
-INCORRECT_CLAIMS = 'Incorrect claims. Please, check the audience and issuer.'
-UNABLE_TO_PARSE = 'Unable to parse authentication token.'
-INAPPROPRIATE_KEY = 'Unable to find the appropriate key.'
+INVALID_BEARER_TOKEN = 'Invalid authorization format, expected "Bearer <Token>"'
