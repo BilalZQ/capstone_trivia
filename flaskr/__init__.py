@@ -7,6 +7,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 import random
 
+from .auth import AuthError, requires_auth
 from models import setup_db, Question, Category
 from utils import (
   paginated_data, get_formatted_categories, error_response
@@ -75,7 +76,8 @@ def create_app(test_config=None):
         })
 
     @app.route('/questions/<int:question_id>', methods=['DELETE'])
-    def delete_question(question_id):
+    @requires_auth('delete-question')
+    def delete_question(token, question_id):
         """
         Delete question.
 
@@ -93,7 +95,8 @@ def create_app(test_config=None):
         }), HTTP_STATUS.NO_CONTENT
 
     @app.route('/questions', methods=['POST'])
-    def create_question():
+    @requires_auth('add-question')
+    def add_question(token):
         """
         Create question.
 
@@ -110,6 +113,30 @@ def create_app(test_config=None):
         return jsonify({
           'success': True,
           'id': question.id
+        }), HTTP_STATUS.CREATED
+
+    @app.route('/questions/<int:question_id>', methods=['PATCH'])
+    @requires_auth('edit-question')
+    def edit_question(token, question_id):
+        """
+        Edit question.
+
+        :return:
+        """
+        question = Question.query.filter_by(id=question_id).first()
+        if not question:
+            abort(HTTP_STATUS.NOT_FOUND)
+
+        question = request.get_json()
+        question.question = request.get('question')
+        question.answer = request.get('answer')
+        question.category = request.get('category')
+        question.difficulty = request.get('difficulty')
+        question.update()
+
+        return jsonify({
+          'success': True,
+          'id': question.format()
         }), HTTP_STATUS.CREATED
 
     @app.route('/questions/search', methods=['POST'])
@@ -152,7 +179,8 @@ def create_app(test_config=None):
         })
 
     @app.route('/quizzes', methods=['POST'])
-    def play_quiz():
+    @requires_auth('play-quiz')
+    def play_quiz(token):
         """
         Play quiz.
 
@@ -177,6 +205,35 @@ def create_app(test_config=None):
           'success': True,
           'question': random_question
         })
+
+
+    # Error Handling
+    @app.errorhandler(AuthError)
+    def auth_error(error):
+        """
+        Error handling for our custom auth error class.
+        :param error:
+        :return:
+        """
+        return jsonify(error.error), error.status_code
+
+    @app.errorhandler(HTTP_STATUS.UNAUTHORIZED)
+    def not_found(error):
+        """
+        Error handler for status code 401.
+        :param error:
+        :return:
+        """
+        return error_response(HTTP_STATUS.UNAUTHORIZED)
+
+    @app.errorhandler(HTTP_STATUS.FORBIDDEN)
+    def not_found(error):
+        """
+        Error handler for status code 403.
+        :param error:
+        :return:
+        """
+        return error_response(HTTP_STATUS.FORBIDDEN)
 
     @app.errorhandler(HTTP_STATUS.NOT_FOUND)
     def not_found(error):
