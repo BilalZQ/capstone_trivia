@@ -373,3 +373,19 @@ createdb trivia_test
 psql trivia_test < trivia.psql
 python test_flaskr.py
 ```
+
+## Deployed Project
+Tokens for api end points are available `trivia_tokens.json` file. They have enhanced expiration duration.
+
+Below url can be used to retrieve token.
+
+```
+https://udacityfsnd.auth0.com/authorize?audience=capstone&response_type=token&client_id=hZOMNJb2DXT6khq5FWsmeblr7SE3wUNz&redirect_uri=http://localhost:5000/
+```
+
+
+Web app is deployed at:
+
+```
+https://capstone-trivia.herokuapp.com/
+```
