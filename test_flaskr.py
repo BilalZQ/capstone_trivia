@@ -6,7 +6,7 @@ import unittest
 import json
 from flask_sqlalchemy import SQLAlchemy
 
-from flaskr import create_app
+from flaskr import app
 from models import setup_db, Question, Category, test_database_path
 from constants import (HTTP_STATUS, ERROR_MESSAGES, MISSING_AUTHORIZATION,
                        INVALID_BEARER_TOKEN, INVALID_BEARER_TOKEN)
@@ -17,7 +17,7 @@ class TriviaTestCase(unittest.TestCase):
 
     def setUp(self):
         """Define test variables and initialize app."""
-        self.app = create_app()
+        self.app = app
         self.client = self.app.test_client
         self.database_path = test_database_path
         setup_db(self.app, self.database_path)
