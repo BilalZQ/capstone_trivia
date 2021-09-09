@@ -5,25 +5,12 @@ from sqlalchemy import Column, String, Integer, create_engine
 from flask_sqlalchemy import SQLAlchemy
 import json
 
-os.environ['DB_HOST'] = ''
-os.environ['DB_USER'] = ''
-os.environ['DB_PASSWORD'] = ''
 
-DB_HOST = os.getenv('DB_HOST', '127.0.0.1:5432')
-DB_USER = os.getenv('DB_USER', 'postgres')
-DB_PASSWORD = os.getenv('DB_PASSWORD', 'postgres')
-DB_NAME = os.getenv('DB_NAME', 'trivia')
-TEST_DB_NAME = os.getenv('DB_NAME', 'trivia_test')
-
-base_path = f'postgres://{DB_USER}:{DB_PASSWORD}@{DB_HOST}/'
-
-database_path = f"{base_path}{DB_NAME}"
-test_database_path = f"{base_path}{TEST_DB_NAME}"
-
+test_database_path = os.environ.get('TEST_DATABASE_URL')
 db = SQLAlchemy()
 
 
-def setup_db(app, database_path=database_path):
+def setup_db(app, database_path=os.environ.get('DATABASE_URL')):
     """
     Bind a flask application and a SQLAlchemy service.
 
