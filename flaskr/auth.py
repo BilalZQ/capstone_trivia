@@ -46,7 +46,8 @@ def get_token_auth_header():
     headers_arr = header.split(' ')
 
     if headers_arr[0].lower() != 'bearer':
-        auth_error('Header expected to have Bearer before token', HTTP_STATUS.UNAUTHORIZED)
+        auth_error('Header expected to have Bearer before token',
+                   HTTP_STATUS.UNAUTHORIZED)
     elif len(headers_arr) != 2:
         auth_error(INVALID_BEARER_TOKEN, HTTP_STATUS.UNAUTHORIZED)
 
@@ -110,7 +111,8 @@ def verify_decode_jwt(token):
                 'Incorrect claims. Please, check the audience and issuer.',
                 HTTP_STATUS.UNAUTHORIZED)
         except Exception:
-            auth_error('Unable to parse authentication token.', HTTP_STATUS.BAD_REQUEST)
+            auth_error('Unable to parse authentication token.',
+                       HTTP_STATUS.BAD_REQUEST)
 
     auth_error('Unable to find the appropriate key..', HTTP_STATUS.BAD_REQUEST)
 

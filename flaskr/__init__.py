@@ -20,7 +20,7 @@ setup_db(app)
 
 CORS(app, resources={r'*': {'origins': '*'}})
 
-# CORS headers
+
 @app.after_request
 def after_request(response):
     """
@@ -35,6 +35,7 @@ def after_request(response):
         'Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE')
     return response
 
+
 @app.route('/categories')
 def get_categories():
     """
@@ -46,6 +47,7 @@ def get_categories():
         'success': True,
         'categories': get_formatted_categories(),
         })
+
 
 @app.route('/questions')
 def get_questions():
@@ -68,6 +70,7 @@ def get_questions():
         'current_category': None
     })
 
+
 @app.route('/questions/<int:question_id>', methods=['DELETE'])
 @requires_auth('delete-question')
 def delete_question(token, question_id):
@@ -86,6 +89,7 @@ def delete_question(token, question_id):
     return jsonify({
         'success': True
     }), HTTP_STATUS.NO_CONTENT
+
 
 @app.route('/questions', methods=['POST'])
 @requires_auth('add-question')
@@ -107,6 +111,7 @@ def add_question(token):
         'success': True,
         'id': question.id
     }), HTTP_STATUS.CREATED
+
 
 @app.route('/questions/<int:question_id>', methods=['PATCH'])
 @requires_auth('edit-question')
@@ -132,6 +137,7 @@ def edit_question(token, question_id):
         'question': question.format()
     }), HTTP_STATUS.CREATED
 
+
 @app.route('/questions/search', methods=['POST'])
 def search_questions():
     """
@@ -147,6 +153,7 @@ def search_questions():
         'success': True,
         'questions': questions,
     })
+
 
 @app.route('/categories/<int:category_id>/questions')
 def get_questions_by_category(category_id):
@@ -170,6 +177,7 @@ def get_questions_by_category(category_id):
         'total_questions': len(questions),
         'current_category': category.format()
     })
+
 
 @app.route('/quizzes', methods=['POST'])
 @requires_auth('play-quiz')
@@ -210,6 +218,7 @@ def auth_error(error):
     """
     return jsonify(error.error), error.status_code
 
+
 @app.errorhandler(HTTP_STATUS.UNAUTHORIZED)
 def not_found(error):
     """
@@ -219,6 +228,7 @@ def not_found(error):
     """
     return error_response(HTTP_STATUS.UNAUTHORIZED)
 
+
 @app.errorhandler(HTTP_STATUS.FORBIDDEN)
 def not_found(error):
     """
@@ -227,6 +237,7 @@ def not_found(error):
     :return:
     """
     return error_response(HTTP_STATUS.FORBIDDEN)
+
 
 @app.errorhandler(HTTP_STATUS.NOT_FOUND)
 def not_found(error):
@@ -238,6 +249,7 @@ def not_found(error):
     """
     return error_response(HTTP_STATUS.NOT_FOUND)
 
+
 @app.errorhandler(HTTP_STATUS.BAD_REQUEST)
 def bad_request(error):
     """
@@ -247,6 +259,7 @@ def bad_request(error):
     :return:
     """
     return error_response(HTTP_STATUS.BAD_REQUEST)
+
 
 @app.errorhandler(HTTP_STATUS.UNPROCESSABLE_ENTITY)
 def unprocessable_entity(error):
@@ -258,6 +271,7 @@ def unprocessable_entity(error):
     """
     return error_response(HTTP_STATUS.UNPROCESSABLE_ENTITY)
 
+
 @app.errorhandler(HTTP_STATUS.INTERNAL_SERVER_ERROR)
 def internal_server_error(error):
     """
@@ -267,6 +281,7 @@ def internal_server_error(error):
     :return:
     """
     return error_response(HTTP_STATUS.INTERNAL_SERVER_ERROR)
+
 
 @app.errorhandler(HTTP_STATUS.METHOD_NOT_ALLOWED)
 def method_not_allowed(error):

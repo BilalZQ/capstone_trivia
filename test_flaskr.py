@@ -176,7 +176,8 @@ class TriviaTestCase(unittest.TestCase):
         :param self:
         :return:
         """
-        response = self.client().post('/questions', json={}, headers=self.admin_header)
+        response = self.client().post(
+            '/questions', json={}, headers=self.admin_header)
         data = json.loads(response.data)
 
         self.assertEqual(response.status_code, HTTP_STATUS.BAD_REQUEST)
@@ -267,7 +268,8 @@ class TriviaTestCase(unittest.TestCase):
         :param self:
         :return:
         """
-        response = self.client().delete(f'/questions/-1', headers=self.admin_header)
+        response = self.client().delete(
+            f'/questions/-1', headers=self.admin_header)
         data = json.loads(response.data)
 
         self.assertEqual(response.status_code, HTTP_STATUS.NOT_FOUND)
@@ -348,9 +350,11 @@ class TriviaTestCase(unittest.TestCase):
             f'/questions/{response_id}', headers=self.user_header)
         data = json.loads(response.data)
 
-        self.assertEqual(response.status_code, HTTP_STATUS.FORBIDDEN)
+        self.assertEqual(
+            response.status_code, HTTP_STATUS.FORBIDDEN)
         self.assertEqual(data.get('success'), False)
-        self.assertEqual(data.get('message'), ERROR_MESSAGES[HTTP_STATUS.FORBIDDEN])
+        self.assertEqual(data.get('message'),
+                         ERROR_MESSAGES[HTTP_STATUS.FORBIDDEN])
 
     def test_search_question_successfully(self):
         """
@@ -513,7 +517,6 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(response.status_code, HTTP_STATUS.CREATED)
         self.assertEqual(json_data.get('success'), True)
         self.assertEqual(json_data.get('question'), edited_question)
-
 
     def test_update_question_without_auth_header(self):
         """

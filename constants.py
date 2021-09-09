@@ -33,5 +33,7 @@ ERROR_MESSAGES = {
 }
 
 
-MISSING_AUTHORIZATION = 'Authorization header in request headers is mandatory.'
-INVALID_BEARER_TOKEN = 'Invalid authorization format, expected "Bearer <Token>"'
+MISSING_AUTHORIZATION = \
+    'Authorization header in request headers is mandatory.'
+INVALID_BEARER_TOKEN = \
+    'Invalid authorization format, expected "Bearer <Token>"'
